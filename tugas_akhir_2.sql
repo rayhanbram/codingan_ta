@@ -11,7 +11,7 @@
  Target Server Version : 80027
  File Encoding         : 65001
 
- Date: 30/06/2022 14:20:17
+ Date: 30/06/2022 19:09:52
 */
 
 SET NAMES utf8mb4;
@@ -23,9 +23,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `kategori`;
 CREATE TABLE `kategori`  (
   `kategori_id` int(0) NOT NULL AUTO_INCREMENT,
-  `deskripsi` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `deskripsi` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   PRIMARY KEY (`kategori_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of kategori
@@ -39,9 +39,9 @@ INSERT INTO `kategori` VALUES (2, 'Camilan');
 DROP TABLE IF EXISTS `lokasi`;
 CREATE TABLE `lokasi`  (
   `lokasi_id` int(0) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nama` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   PRIMARY KEY (`lokasi_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of lokasi
@@ -66,7 +66,7 @@ CREATE TABLE `menu_lokasi`  (
   INDEX `menu_id`(`menu_id`) USING BTREE,
   CONSTRAINT `menu_lokasi_ibfk_1` FOREIGN KEY (`lokasi_id`) REFERENCES `lokasi` (`lokasi_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `menu_lokasi_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `menu_mpasi` (`menu_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of menu_lokasi
@@ -259,14 +259,14 @@ CREATE TABLE `menu_mpasi`  (
   `menu_id` int(0) NOT NULL AUTO_INCREMENT,
   `umur_id` int(0) NOT NULL,
   `kategori_id` int(0) NOT NULL,
-  `menu` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `menu` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `gambar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`menu_id`) USING BTREE,
   INDEX `umur_id`(`umur_id`) USING BTREE,
   INDEX `kategori_id`(`kategori_id`) USING BTREE,
   CONSTRAINT `menu_mpasi_ibfk_1` FOREIGN KEY (`umur_id`) REFERENCES `umur` (`umur_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `menu_mpasi_ibfk_2` FOREIGN KEY (`kategori_id`) REFERENCES `kategori` (`kategori_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of menu_mpasi
@@ -363,7 +363,7 @@ CREATE TABLE `menu_preferensi`  (
   INDEX `menu_id`(`menu_id`) USING BTREE,
   CONSTRAINT `menu_preferensi_ibfk_1` FOREIGN KEY (`preferensi_id`) REFERENCES `preferensi` (`preferensi_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `menu_preferensi_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `menu_mpasi` (`menu_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of menu_preferensi
@@ -465,9 +465,9 @@ INSERT INTO `menu_preferensi` VALUES (90, 3, 78);
 DROP TABLE IF EXISTS `preferensi`;
 CREATE TABLE `preferensi`  (
   `preferensi_id` int(0) NOT NULL AUTO_INCREMENT,
-  `jenis` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `jenis` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   PRIMARY KEY (`preferensi_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of preferensi
@@ -482,9 +482,9 @@ INSERT INTO `preferensi` VALUES (3, 'Lembut');
 DROP TABLE IF EXISTS `umur`;
 CREATE TABLE `umur`  (
   `umur_id` int(0) NOT NULL AUTO_INCREMENT,
-  `umur` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `umur` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   PRIMARY KEY (`umur_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of umur
