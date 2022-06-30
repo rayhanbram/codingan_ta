@@ -40,7 +40,7 @@ include('db_connection.php');
                             <h6> Umur </h6>
                             <hr>
                             <?php
-                                $con = mysqli_connect("localhost","root","","tugas_akhir");
+                                $con = mysqli_connect("localhost","root","admin","tugas_akhir_2");
 
                                
                                         ?>
@@ -123,6 +123,7 @@ include('db_connection.php');
                     </div>
                 </form>
             </div>
+			
 
             <!-- Menampilkan Pilihan -->
             <!-- <img src='. $menuitems['gambar'] .' alt="" class="img-responsive" > -->
@@ -130,66 +131,59 @@ include('db_connection.php');
                 <div class="card ">
                     <div class="card-body row">
                         <?php
-                            if(isset($_GET['umur']) || isset($_GET['lokasi']) || isset($_GET['jenis']))
-                            {
-                                if(isset($_GET['umur'])){
-                                    $umur= $_GET['umur'];
-                                    $menu = "SELECT * FROM menu_mpasi WHERE umur_id = $umur";   
-                                }
-                                
-                                //rencana nya aturannya mau seperti ini
-                                //jika memilih lokasi jakarta menampilkan pilihan dengan filter_id 1 dari tabel gabungan
-                                //jika memilih lokasi jakarta dan preferensi A menampilkan pilihan dengan filter_id 2 dari tabel gabungan
-                                //jika memilih lokasi jakarta dan preferensi A  dan preferensi B menampilkan pilihan dengan filter_id 3 dari tabel gabungan
-                                $lokasi = "lokasi";
-                                if($lokasi == 1){
-                                 "SELECT * FROM jakarta"; 
-                                }
-                               
-                               
-                                $menu_run = mysqli_query($con, $menu);
-                                if(mysqli_num_rows($menu_run) > 0)
-                                {
-                                    foreach($menu_run as $menuitems) :
-                                        
-                                           echo' <div class="col-sm-4 col-lg-3 col-md-3">
-                                                <div style="border:1px solid #ccc; border-radius:5px; padding:16px; margin-bottom:16px; height:120px;">
-                                               
-                                                <p align="center"><strong><a href="#">'. $menuitems['menu'] .'</a></strong></p>
-                                                <h6 style="text-align:center;" class="text-danger" >'. $menuitems['kategori'] .'</h6>
-                                                <p>Umur : '. $menuitems['umur_id'].' <br />
-                                            </div>
-                                        ';
-                                    endforeach;
-                                }
-                                else
-                                {
-                                    echo "Rekomendasi Belum Tersedia";
-                                }
-                            }
-                            else
-                            {
-                                $menu = "SELECT * FROM menu_mpasi";
-                                $menu_run = mysqli_query($con, $menu);
-                                if(mysqli_num_rows($menu_run) > 0)
-                                {
-                                    foreach($menu_run as $menuitems) :
-                                        
-                                           echo' <div class="col-sm-4 col-lg-3 col-md-3">
-                                                <div style="border:1px solid #ccc; border-radius:5px; padding:16px; margin-bottom:16px; height:120px;">
-                                                
-                                                <p align="center"><strong><a href="#">'. $menuitems['menu'] .'</a></strong></p>
-                                                <h6 style="text-align:center;" class="text-danger" >'. $menuitems['kategori'] .'</h6>
-                                                <p>Umur : '. $menuitems['umur_id'].' <br />
-                                            </div>
-                                        ';
-                                    endforeach;
-                                }
-                                else
-                                {
-                                    echo "Rekomendasi Belum Tersedia";
-                                }
-                            }
+							
+							$umur = $_GET['umur'];
+							$lokasi = $_GET['lokasi'];
+							$prefs = $_GET['jenis'];
+							
+							
+							$query = "select distinct  a.menu_id id, a.menu menu, b.umur umur, c.deskripsi kategori from 
+										menu_mpasi a 
+										join umur b on a.umur_id = b.umur_id
+										join kategori c on a.kategori_id = c.kategori_id
+										join menu_lokasi d on d.menu_id = a.menu_id
+										join (
+												select a.menu_id
+												from menu_mpasi a 											
+											
+										";
+							if(isset($prefs)){
+								if(isset($prefs[0])) $query .= " join menu_preferensi d on a.menu_id = d.menu_id and d.preferensi_id = $prefs[0]";
+								if(isset($prefs[1])) $query .= " join menu_preferensi c on a.menu_id = c.menu_id and c.preferensi_id = $prefs[1]";
+								if(isset($prefs[2])) $query .= " join menu_preferensi b on a.menu_id = b.menu_id and b.preferensi_id = $prefs[2]";
+							}		
+
+							$query .= ") pref on a.menu_id = pref.menu_id
+											where 1=1 ";
+											
+							
+							if(isset($umur)) $query .= " and b.umur_id = $umur";
+							if(isset($lokasi)) $query .= " and d.lokasi_id = $lokasi";
+							
+							
+							$menu_run = mysqli_query($con, $query);
+							if(mysqli_num_rows($menu_run) > 0)
+							{
+								foreach($menu_run as $menuitems) :
+									
+									   echo' <div>
+											<div style="border:1px solid #ccc; border-radius:5px; padding:16px; margin-bottom:16px; height:120px;">
+										   
+											<p align="center"><strong><a href="#">'. $menuitems['menu'] .'</a></strong></p>
+											<h6 style="text-align:center;" class="text-danger" >'. $menuitems['kategori'] .'</h6>
+											<p style="text-align:center;">Umur : '. $menuitems['umur'].' <br />
+										</div>
+									';
+								endforeach;
+							}
+							else
+							{
+								echo "Rekomendasi Belum Tersedia";
+							}
+							
+							
+                            
+                            
                         ?>
                     </div>
                 </div>
