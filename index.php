@@ -141,7 +141,7 @@ include('db_connection.php');
 										menu_mpasi a 
 										join umur b on a.umur_id = b.umur_id
 										join kategori c on a.kategori_id = c.kategori_id
-										join menu_lokasi d on d.menu_id = a.menu_id
+										left join menu_lokasi d on d.menu_id = a.menu_id
 										join (
 												select a.menu_id
 												from menu_mpasi a 											
