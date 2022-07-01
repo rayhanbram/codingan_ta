@@ -47,44 +47,44 @@ include('db_connection.php');
                                             <div>
                                                 <input type="radio" name="umur" 
                                                     <?php if (isset($_GET['umur']) && $_GET['umur']==1) {echo "checked";}?> 
-                                                    value=1>6-8 Bulan
+                                                    value=1> 6-8 Bulan
+												<br />
                                                 <input type="radio" name="umur" 
                                                     <?php if (isset($_GET['umur']) && $_GET['umur']==2) {echo "checked";}?> 
-                                                    value=2>9-11 Bulan
+                                                    value=2> 9-11 Bulan
+												<br />
                                                  <input type="radio" name="umur" 
                                                     <?php if (isset($_GET['umur']) && $_GET['umur']==3) {echo "checked";}?> 
-                                                    value=3>12-23 Bulan
+                                                    value=3> 12-23 Bulan
                                                
                                             </div>
-                                        <?php
-                            ?>
+                                        
                         </div>
                         <div class="card-body">
                             <h6>Daerah</h6>
                             <hr>
                             
                                 <div>
-                                <input type="radio" name="lokasi" 
-                                     <?php if (isset($_GET['lokasi']) && $_GET['lokasi']==1) {echo "checked";}?> 
-                                     value=1>Jakarta
-                                <input type="radio" name="lokasi" 
-                                     <?php if (isset($_GET['lokasi']) && $_GET['lokasi']==2) {echo "checked";}?> 
-                                     value=2>Jawa Barat
-                                <input type="radio" name="lokasi" 
-                                     <?php if (isset($_GET['lokasi']) && $_GET['lokasi']==3) {echo "checked";}?> 
-                                     value=3>Banten
-                                     <input type="radio" name="lokasi" 
-                                     <?php if (isset($_GET['lokasi']) && $_GET['lokasi']==4) {echo "checked";}?> 
-                                     value=4>Jawa Timur 
-                                <input type="radio" name="lokasi" 
-                                     <?php if (isset($_GET['lokasi']) && $_GET['lokasi']==5) {echo "checked";}?> 
-                                     value=5>Bali
-                                <input type="radio" name="lokasi" 
-                                     <?php if (isset($_GET['lokasi']) && $_GET['lokasi']==6) {echo "checked";}?> 
-                                     value=6>Sumatera Barat   
-                                            </div>
-                                        <?php
-                            ?>
+								
+								<?php
+									$daerah_query = "SELECT * FROM lokasi";
+									$daerah_query_run  = mysqli_query($con, $daerah_query);
+									
+									if(mysqli_num_rows($daerah_query_run) > 0)
+									{
+										foreach($daerah_query_run as $daerahlist)
+										{											
+											?>
+											<input type="radio" name="lokasi" 
+												 <?php if (isset($_GET['lokasi']) && $_GET['lokasi']== $daerahlist['lokasi_id']) {echo "checked";}?> 
+												 value= <?php echo $daerahlist['lokasi_id'] ?> > <?php echo $daerahlist['nama']?>
+											<br />
+											<?php
+										}
+									}
+									
+								?>  
+                                </div>
                         </div>
                         <div class="card-body">
                             <h6> Preferensi Makan </h6>
@@ -132,16 +132,16 @@ include('db_connection.php');
                     <div class="card-body row">
                         <?php
 							
-							$umur = $_GET['umur'];
-							$lokasi = $_GET['lokasi'];
-							$prefs = $_GET['jenis'];
+							if(isset($_GET['umur'])) $umur = $_GET['umur'];
+							if(isset($_GET['lokasi'])) $lokasi = $_GET['lokasi'];
+							if(isset($_GET['jenis'])) $prefs = $_GET['jenis'];
 							
 							
 							$query = "select distinct  a.menu_id id, a.menu menu, b.umur umur, c.deskripsi kategori from 
 										menu_mpasi a 
 										join umur b on a.umur_id = b.umur_id
 										join kategori c on a.kategori_id = c.kategori_id
-										join menu_lokasi d on d.menu_id = a.menu_id
+										left join menu_lokasi d on d.menu_id = a.menu_id
 										join (
 												select a.menu_id
 												from menu_mpasi a 											
