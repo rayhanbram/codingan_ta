@@ -40,7 +40,7 @@ include('db_connection.php');
                             <h6> Umur </h6>
                             <hr>
                             <?php
-                                $con = mysqli_connect("localhost","root","admin","tugas_akhir_2");
+                                $con = mysqli_connect("localhost","root","","codingan_ta");
 
                                
                                         ?>

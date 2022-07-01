@@ -14,7 +14,7 @@
  Date: 30/06/2022 19:09:52
 */
 
-SET NAMES utf8mb4;
+SET NAMES latin1;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
@@ -260,7 +260,7 @@ CREATE TABLE `menu_mpasi`  (
   `umur_id` int(0) NOT NULL,
   `kategori_id` int(0) NOT NULL,
   `menu` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `gambar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `gambar` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   PRIMARY KEY (`menu_id`) USING BTREE,
   INDEX `umur_id`(`umur_id`) USING BTREE,
   INDEX `kategori_id`(`kategori_id`) USING BTREE,
