@@ -50,6 +50,8 @@ img {
 }
 </style>
 </head>
+
+<!-- Menampilkan Detail -->
 <body>
 <div class="container">
         <div class="row">

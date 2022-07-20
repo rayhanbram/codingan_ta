@@ -170,7 +170,7 @@ img {
 			
 
             <!-- Menampilkan Pilihan -->
-            <!-- <img src='. $menuitems['gambar'] .' alt="" class="img-responsive" > -->
+            
             <div class="col-md-9 mt-3">
                 <div class="card ">
                     <div class="card-body row">
