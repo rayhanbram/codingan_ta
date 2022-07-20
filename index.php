@@ -16,7 +16,7 @@ include('db_connection.php');
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
 img {
-  width: 40%;
+  /* width: 40%; */
   height: 100px;
   display: block;
   margin-left: auto;
@@ -84,7 +84,8 @@ img {
                             <h6> Umur </h6>
                             <hr>
                             <?php
-                                $con = mysqli_connect("localhost","root","","codingan_ta");
+                                $con = mysqli_connect("localhost","root","admin","codingan_ta");
+								//$con = mysqli_connect("localhost","root","","tugas_akhir_2");
 
                                
                                         ?>
@@ -167,75 +168,111 @@ img {
                     </div>
                 </form>
             </div>
+
+            <!-- processing data -->
+            <?php 
+                if(isset($_GET['umur'])) $umur = $_GET['umur'];
+                if(isset($_GET['lokasi'])) $lokasi = $_GET['lokasi'];
+                if(isset($_GET['jenis'])) $prefs = $_GET['jenis'];
+
+                $isQueryHaveData = false;
+                
+                
+                $query = "select distinct  a.menu_id id, a.menu menu, a.gambar, b.umur umur, c.deskripsi kategori from 
+                            menu_mpasi a 
+                            join umur b on a.umur_id = b.umur_id
+                            join kategori c on a.kategori_id = c.kategori_id
+                            left join menu_lokasi d on d.menu_id = a.menu_id
+                            join (
+                                    select a.menu_id
+                                    from menu_mpasi a 											
+                                
+                            ";
+                if(isset($prefs)){
+                    if(isset($prefs[0])) $query .= " join menu_preferensi d on a.menu_id = d.menu_id and d.preferensi_id = $prefs[0]";
+                    if(isset($prefs[1])) $query .= " join menu_preferensi c on a.menu_id = c.menu_id and c.preferensi_id = $prefs[1]";
+                    if(isset($prefs[2])) $query .= " join menu_preferensi b on a.menu_id = b.menu_id and b.preferensi_id = $prefs[2]";
+                }		
+
+                $query .= ") pref on a.menu_id = pref.menu_id
+                                where 1=1 ";
+                                
+                
+                if(isset($umur)) $query .= " and b.umur_id = $umur";
+                if(isset($lokasi)) $query .= " and d.lokasi_id = $lokasi";
+
+                $query .= " order by c.deskripsi";
+                
+                
+                $menu_run = mysqli_query($con, $query);
+                if(mysqli_num_rows($menu_run) > 0) {$isQueryHaveData = true;}
+
+                $dataArray = array();
+
+                foreach($menu_run as $menuitems) :
+                    if(count($dataArray[$menuitems[kategori]]) == 0){
+                        $dataArray[$menuitems[kategori]] = array();
+                    }
+
+                    array_push($dataArray[$menuitems[kategori]], $menuitems);
+                endforeach;
+
+                
+            ?>
+
+            <!-- end processing data -->
 			
 
             <!-- Menampilkan Pilihan -->
             
-            <div class="col-md-9 mt-3">
+            <div class="col-md-9 mt-3">            
                 <div class="card ">
-                    <div class="card-body row">
-                    <h5>Makanan Utama</h5>
-                        <?php
-							
-							if(isset($_GET['umur'])) $umur = $_GET['umur'];
-							if(isset($_GET['lokasi'])) $lokasi = $_GET['lokasi'];
-							if(isset($_GET['jenis'])) $prefs = $_GET['jenis'];
-							
-							
-							$query = "select distinct  a.menu_id id, a.menu menu, a.gambar, b.umur umur, c.deskripsi kategori from 
-										menu_mpasi a 
-										join umur b on a.umur_id = b.umur_id
-										join kategori c on a.kategori_id = c.kategori_id
-										left join menu_lokasi d on d.menu_id = a.menu_id
-										join (
-												select a.menu_id
-												from menu_mpasi a 											
-											
-										";
-							if(isset($prefs)){
-								if(isset($prefs[0])) $query .= " join menu_preferensi d on a.menu_id = d.menu_id and d.preferensi_id = $prefs[0]";
-								if(isset($prefs[1])) $query .= " join menu_preferensi c on a.menu_id = c.menu_id and c.preferensi_id = $prefs[1]";
-								if(isset($prefs[2])) $query .= " join menu_preferensi b on a.menu_id = b.menu_id and b.preferensi_id = $prefs[2]";
-							}		
 
-							$query .= ") pref on a.menu_id = pref.menu_id
-											where 1=1 ";
-											
-							
-							if(isset($umur)) $query .= " and b.umur_id = $umur";
-							if(isset($lokasi)) $query .= " and d.lokasi_id = $lokasi";
-							
-							
-							$menu_run = mysqli_query($con, $query);
-							if(mysqli_num_rows($menu_run) > 0)
-							{
-								foreach($menu_run as $menuitems) :
-									
-									   echo' <div>
-                                       <div class="column">
-											<div class="cardmenu">
-                                            
-											<p align="center"><strong><a href="detail.php?menu_id='.$menuitems['menu'].'&umur='.$menuitems['umur'].'&kategori='.$menuitems['kategori'].'&gambar='.$menuitems['gambar'].'">'. $menuitems['menu'] .'</a></strong></p>
-                                            <img src='. $menuitems['gambar'] .' alt="Gambar Menu" class="img">
-											<h6 style="text-align:center;" class="text-danger" >'. $menuitems['kategori'] .'</h6>
-											<p style="text-align:center;">Umur : '. $menuitems['umur'].' <br />
-										</div>
-                                        </div>
-									';
-								endforeach;
-							}
-							else
-							{
-								echo "Rekomendasi Belum Tersedia";
-							}
-							
-							
-                            
-                            
-                        ?>
-                    </div>
+                    <?php
+                        if($isQueryHaveData){
+                            foreach($dataArray as $data_key => $data_val) :
+
+                                echo '<div class="card-body row"><h1>'.$data_key.'</h1>';
+                                echo '<div class="container mt-5 mb-3"><div class="row">';
+                                foreach($data_val as $menuitems) :
+                                    
+                                    echo'
+                                    
+                                                                <div class="col-md-4">
+                                                                    <div class="card p-3 mb-2">
+                                                                        <div>
+                                                                            <img src='. $menuitems['gambar'] .' alt="Gambar Menu" class="img" />
+                                                                        </div>
+                                                                        <div class="mt-5">
+                                                                            <h3 class="heading"><a href="detail.php?menu_id='.$menuitems['menu'].'&umur='.$menuitems['umur'].'&kategori='.$menuitems['kategori'].'&gambar='.$menuitems['gambar'].'">'. $menuitems['menu'] .'</a></h3>
+                                                                            <div class="mt-5">
+                                                                                <div class="mt-3"> <span class="text1">'. $menuitems['umur'].'</span><br><span class="text1">'. $menuitems['kategori'] .'</span> </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            
+                                    ';
+    
+    
+                                endforeach;
+                                echo '</div></div>';
+    
+    
+                                echo '</div>';
+    
+                            endforeach;
+                        }else{
+                            echo "Rekomendasi Belum Tersedia";
+                        }
+                        
+                    ?>
+                    
+                    
                 </div>
             </div> 
+        </div>
+                    
         </div>
     </div>
 
